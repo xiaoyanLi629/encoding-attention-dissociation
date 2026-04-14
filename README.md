@@ -5,238 +5,180 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This repository contains the complete analysis pipeline for the CogSci 2026 submission on cognitive efficiency and multimodal brain encoding.
+This repository contains the complete analysis pipeline for a study on cognitive efficiency and multimodal brain encoding. Originally submitted to CogSci 2026, now revised for IEEE BIBM 2026 with additional multi-model validation and control analyses.
 
-**Conference Theme**: Cognitive Efficiency and Inefficiency
-
-**Key Finding**: Despite visual features dominating brain encoding (91% of regions), attention weights remain balanced (~33% per modality)—revealing an apparent "inefficiency" that enables robust multimodal integration.
-
----
-
-## Table of Contents
-
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Analysis Pipeline](#analysis-pipeline)
-- [Key Results](#key-results)
-- [Paper](#paper)
-- [Data Requirements](#data-requirements)
-- [Citation](#citation)
+**Key Finding**: Despite visual features dominating brain encoding (91% of regions), attention weights remain balanced (~33% per modality) — an *Encoding-Attention Dissociation* that is robust across encoding thresholds, training strategies, and feature extraction models.
 
 ---
 
 ## Project Structure
 
 ```
-project_1/
-├── README.md                           # This file
-├── .gitignore                          # Git ignore rules
+project/
+├── README.md
+├── requirements.txt
+├── LICENSE
 │
-├── src/                                # Core analysis scripts
-│   ├── 01_train_unimodal_models.py     # Step 1: Train unimodal encoding models
-│   ├── 02_modality_contribution_analysis.py  # Step 2: Modality contribution analysis
-│   ├── 03_crossmodal_attention_analysis.py   # Step 3: Cross-modal attention analysis
-│   ├── 04_brain_network_analysis.py    # Step 4: Brain network analysis
-│   ├── generate_all_figures.py         # Step 5: Publication figure generator
-│   ├── generate_encoding_attention_dissociation_figure.py  # Core dissociation figure
-│   └── brain_region_mapping.py         # Schaefer 1000 parcellation utilities
+├── src/                                    # Analysis scripts
+│   ├── 01_train_unimodal_models.py         # Step 1: Train unimodal Ridge encoding models
+│   ├── 02_modality_contribution_analysis.py # Step 2: Modality contribution analysis
+│   ├── 03_crossmodal_attention_analysis.py  # Step 3: Cross-modal attention analysis
+│   ├── 04_brain_network_analysis.py         # Step 4: Brain network analysis
+│   ├── 05_extract_additional_features.py    # Step 5: Multi-model feature extraction (NEW)
+│   ├── 06_train_multimodal_model.py         # Step 6: Train multimodal attention network (NEW)
+│   ├── 07_control_analyses.py              # Step 7: Control analyses (NEW)
+│   ├── generate_all_figures.py             # Publication figure generator
+│   ├── generate_encoding_attention_dissociation_figure.py
+│   └── brain_region_mapping.py             # Schaefer 1000 parcellation utilities
 │
-├── scripts/                            # Utility scripts
-│   ├── run_full_analysis.py            # Complete pipeline runner
-│   ├── convert_to_pdf.py               # Markdown to PDF converter
-│   └── generate_images.py              # AI image generation (DALL-E 3/Gemini)
+├── scripts/                                # Utility scripts
+│   ├── run_full_analysis.py                # Complete pipeline runner
+│   ├── convert_to_pdf.py
+│   └── generate_images.py
 │
-├── paper/                              # Manuscript files
-│   ├── main.tex                        # LaTeX manuscript
-│   ├── main.pdf                        # Compiled PDF
-│   ├── CogSci_Template.bib             # Bibliography
-│   ├── cogsci.sty                      # CogSci style file
-│   └── figures/                        # Paper figures
-│       └── figures1/                   # Additional figures
+├── IEEE_manuscript/                        # IEEE BIBM 2026 manuscript (revised)
+│   ├── IEEE-conference-template-062824.tex # Main LaTeX source
+│   ├── IEEE-conference-template-062824.pdf # Compiled PDF
+│   ├── IEEEtran.cls                        # IEEE style class
+│   ├── figure1.png                         # Unimodal encoding figure
+│   ├── figure2.png                         # Hierarchical integration figure
+│   └── figure3_control_analyses.png        # Control analyses figure (NEW)
 │
-├── results/                            # Example results
-│   └── example_run/                    # Pre-computed example outputs
+├── cog_sci_latex2026/                      # Original CogSci 2026 submission
+│   ├── cogsci_full_paper_template.tex
+│   ├── cogsci_full_paper_template.pdf
+│   ├── cogsci_bibliography_template.bib
+│   └── ...
 │
-└── runs/                               # Analysis outputs (timestamped)
-    └── run_YYYYMMDD_HHMMSS/
-        ├── run_config.json             # Run configuration
-        ├── unimodal_models/            # Trained models and correlations
-        ├── modality_contribution/      # Modality specificity analysis
-        ├── crossmodal_attention/       # Attention weight analysis
-        ├── brain_networks/             # Network-level analysis
-        └── figures/                    # Publication figures (600 DPI)
+├── results/example_run/                    # Pre-computed example outputs
+│
+└── runs/
+    ├── run_20251210_142057/                # Original analysis run
+    └── run_revised/                        # Revised analysis (NEW)
+        ├── unimodal_models/                # 12 Ridge models (4 subjects × 3 modalities)
+        ├── trained_models/                 # 4 multimodal .pth models
+        ├── multi_model/                    # CLIP/Wav2Vec2/GPT-2 encoding comparison
+        └── control_analyses/               # Subset + end-to-end control results
 ```
 
 ---
 
 ## Installation
 
-### Requirements
-
-- Python 3.8+
-- PyTorch 1.9+
-- NumPy, SciPy, Pandas
-- Matplotlib, Seaborn
-- Scikit-learn
-- NiBabel (for neuroimaging data)
-
-### Setup
-
 ```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/encoding-attention-dissociation.git
-cd encoding-attention-dissociation
-
-# Create virtual environment (optional but recommended)
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
 pip install -r requirements.txt
 ```
 
----
-
-## Quick Start
-
-### Run Complete Analysis Pipeline
-
-Each run creates a timestamped output directory: `runs/run_YYYYMMDD_HHMMSS/`
-
+**Additional dependencies for multi-model feature extraction** (Step 5):
 ```bash
-# Run full analysis (creates new timestamped directory)
-python scripts/run_full_analysis.py --project_dir /path/to/data
-
-# Skip training (if models already exist)
-python scripts/run_full_analysis.py --skip_training
-
-# Run only specific step
-python scripts/run_full_analysis.py --only figures
-```
-
-### Run Steps Individually
-
-```bash
-# Step 1: Train unimodal encoding models
-python src/01_train_unimodal_models.py \
-    --project_dir /path/to/data \
-    --output_dir ./runs/my_run/unimodal_models
-
-# Step 2: Modality contribution analysis
-python src/02_modality_contribution_analysis.py \
-    --project_dir /path/to/data \
-    --input_dir ./runs/my_run/unimodal_models \
-    --output_dir ./runs/my_run/modality_contribution
-
-# Step 3: Cross-modal attention analysis
-python src/03_crossmodal_attention_analysis.py \
-    --project_dir /path/to/data \
-    --output_dir ./runs/my_run/crossmodal_attention
-
-# Step 4: Brain network analysis
-python src/04_brain_network_analysis.py \
-    --project_dir /path/to/data \
-    --input_dir ./runs/my_run/unimodal_models \
-    --output_dir ./runs/my_run/brain_networks
-
-# Step 5: Generate publication figures
-python src/generate_all_figures.py \
-    --project_dir /path/to/data \
-    --input_dir ./runs/my_run \
-    --output_dir ./runs/my_run/figures
+pip install transformers opencv-python-headless soundfile
 ```
 
 ---
 
 ## Analysis Pipeline
 
-### Step 1: Unimodal Encoding Models
-Trains Ridge regression models to predict fMRI responses from each modality (visual, audio, language) independently.
+### Core Analysis (Steps 1–4)
 
-### Step 2: Modality Contribution Analysis
-Quantifies the contribution of each modality to brain activity across 1000 cortical parcels using the Schaefer 2018 atlas.
+| Step | Script | Description | GPU? |
+|------|--------|-------------|------|
+| 1 | `01_train_unimodal_models.py` | Ridge regression encoding models per modality | No |
+| 2 | `02_modality_contribution_analysis.py` | Modality specificity/dominance analysis | No |
+| 3 | `03_crossmodal_attention_analysis.py` | Extract attention weights from trained models | No |
+| 4 | `04_brain_network_analysis.py` | Network-level integration analysis | No |
 
-### Step 3: Cross-Modal Attention Analysis
-Trains a personalized multimodal neural network that learns explicit modality fusion weights, revealing the brain's attention allocation strategy.
+### New Analyses for Revision (Steps 5–7)
 
-### Step 4: Brain Network Analysis
-Analyzes modality integration patterns across the 7 canonical functional networks (Visual, Somatomotor, Dorsal Attention, Ventral Attention, Limbic, Frontoparietal, Default Mode).
+| Step | Script | Description | GPU? |
+|------|--------|-------------|------|
+| 5 | `05_extract_additional_features.py` | Extract CLIP/Wav2Vec2/GPT-2 features from stimuli | **Yes** |
+| 6 | `06_train_multimodal_model.py` | Train PersonalizedMultiModalNetwork with learnable modality weights | **Yes** |
+| 7 | `07_control_analyses.py` | High-encoding subset, end-to-end, permutation controls | **Yes** |
 
-### Step 5: Figure Generation
-Generates publication-quality figures (600 DPI) for the manuscript.
+### Quick Start
+
+```bash
+# Run unimodal encoding (CPU, ~30 min)
+python src/01_train_unimodal_models.py \
+    --project_dir /path/to/data \
+    --output_dir runs/run_revised/unimodal_models
+
+# Train multimodal attention model (GPU recommended, ~1 hr)
+python src/06_train_multimodal_model.py \
+    --project_dir /path/to/data \
+    --output_dir runs/run_revised/trained_models
+
+# Extract additional model features (GPU required, ~2 hrs)
+python src/05_extract_additional_features.py \
+    --project_dir /path/to/data \
+    --output_dir /path/to/data/data/features/additional_features
+
+# Run control analyses (GPU recommended, ~1 hr)
+python src/07_control_analyses.py \
+    --project_dir /path/to/data \
+    --output_dir runs/run_revised/control_analyses \
+    --unimodal_results_dir runs/run_revised/unimodal_models \
+    --controls subset,e2e
+```
 
 ---
 
 ## Key Results
 
-### The Encoding-Attention Dissociation
+### Encoding-Attention Dissociation
 
 | Metric | Visual | Audio | Language |
 |--------|--------|-------|----------|
 | **Encoding Accuracy** | r = 0.204 | r = 0.107 | r = 0.122 |
 | **Dominant Regions** | 91% | 5% | 4% |
-| **Attention Weights** | 33% | 35% | 32% |
+| **Observed Attention** | 32.3% | 34.6% | 33.1% |
+| **Efficient Attention** | 47.1% | 24.7% | 28.2% |
 
-**Key Insight**: Despite visual features providing 2× higher encoding accuracy and dominating 91% of brain regions, attention weights remain balanced (~33% per modality). This "inefficiency" enables robust multimodal integration.
+### Control Analyses
 
-### Hierarchical Integration Architecture
+| Control | Result | Rules Out |
+|---------|--------|-----------|
+| High-encoding subset (r > 0.2) | V=0.330, A=0.336, L=0.334 | Poor model fit |
+| End-to-end training | V=0.328, A=0.343, L=0.329 | Training artifact |
+| Multi-model (CLIP/Wav2Vec2/GPT-2) | Visual still dominant | Model-specific artifact |
 
-1. **Early Sensory Cortex**: Modality-specific processing (high MSI)
-2. **Association Cortex**: Multimodal integration (high MII)
-3. **Default Mode Network**: Integration hub with balanced attention
+### Multi-Model Validation
 
----
+| Modality | Primary Model (r) | Alternative Model (r) |
+|----------|-------------------|----------------------|
+| Visual | SlowFast = 0.204 | CLIP = 0.133 |
+| Audio | MFCC = 0.107 | Wav2Vec2 = 0.097 |
+| Language | BERT = 0.122 | GPT-2 = 0.125 |
 
-## Paper
-
-The manuscript is located in `paper/main.tex`. To compile:
-
-```bash
-cd paper
-pdflatex main
-biber main
-pdflatex main
-pdflatex main
-```
-
-The compiled PDF is available at `paper/main.pdf`.
+Visual > Language > Audio ordering preserved across both model sets.
 
 ---
 
 ## Data Requirements
 
-This analysis requires:
+This analysis requires data from the [Algonauts 2025 Challenge](https://algonautsproject.com/):
 
 1. **fMRI Data**: Preprocessed BOLD signals parcellated using Schaefer 1000 atlas
-2. **Feature Embeddings**: 
-   - Visual: CLIP embeddings
-   - Audio: Wav2Vec2 embeddings
-   - Language: GPT-2 embeddings
+2. **Feature Embeddings**: Official stimulus features (PCA-reduced)
+3. **Stimuli** (for multi-model extraction): Original .mkv video files and .tsv transcripts
 
-Data should be organized as:
-```
-/path/to/data/
-├── fmri/
-│   └── subject_X/
-│       └── video_segment.npy
-└── features/
-    ├── visual/
-    ├── audio/
-    └── language/
-```
+---
+
+## Manuscripts
+
+- **IEEE BIBM 2026** (revised): `IEEE_manuscript/IEEE-conference-template-062824.pdf`
+- **CogSci 2026** (original): `cog_sci_latex2026/cogsci_full_paper_template.pdf`
 
 ---
 
 ## Citation
 
-If you use this code in your research, please cite:
-
 ```bibtex
-@inproceedings{ding2026encoding,
-  title={Apparent Inefficiency, Hidden Optimality: Why the Brain's Multimodal Attention Does Not Track Feature Strength},
-  author={Ding, Xiaoyue},
-  booktitle={Proceedings of the 48th Annual Conference of the Cognitive Science Society},
+@inproceedings{anonymous2026encoding,
+  title={Apparent Inefficiency, Hidden Optimality: Why the Brain's Multimodal
+         Attention Does Not Track Feature Strength},
+  author={Anonymous},
+  booktitle={IEEE International Conference on Bioinformatics and Biomedicine (BIBM)},
   year={2026}
 }
 ```
@@ -245,12 +187,4 @@ If you use this code in your research, please cite:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## Acknowledgments
-
-- Schaefer 2018 parcellation atlas
-- Friends and Movie10 naturalistic viewing datasets
-- CogSci 2026 Conference on Cognitive Efficiency
+MIT License — see [LICENSE](LICENSE) for details.
