@@ -69,7 +69,7 @@ def run_script(script_path, args_list=None, description=""):
 
 def main():
     parser = argparse.ArgumentParser(description='运行完整分析流程')
-    parser.add_argument('--project_dir', default='/root/autodl-fs/CCN_Competition',
+    parser.add_argument('--project_dir', default=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                         help='项目根目录')
     parser.add_argument('--subjects', default='1,2,3,5', help='被试列表')
     parser.add_argument('--skip_training', action='store_true', 

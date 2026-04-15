@@ -528,7 +528,7 @@ class MultimodalTrainer:
 def main():
     parser = argparse.ArgumentParser(
         description='Train Personalized Multimodal Neural Network')
-    parser.add_argument('--project_dir', default='/root/autodl-fs/CCN_Competition',
+    parser.add_argument('--project_dir', default=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                         help='Project root directory')
     parser.add_argument('--subjects', default='1,2,3,5', help='Subject list')
     parser.add_argument('--output_dir', default=None, help='Output directory')

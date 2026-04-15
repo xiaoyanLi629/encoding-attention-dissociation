@@ -601,7 +601,7 @@ class MultiModelConsistency:
 
 def main():
     parser = argparse.ArgumentParser(description='Control Analyses')
-    parser.add_argument('--project_dir', default='/root/autodl-fs/CCN_Competition',
+    parser.add_argument('--project_dir', default=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                         help='Project root directory')
     parser.add_argument('--output_dir', required=True,
                         help='Output directory for control analyses')

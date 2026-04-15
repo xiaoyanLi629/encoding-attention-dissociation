@@ -640,7 +640,7 @@ class ModalityContributionAnalyzer:
 
 def main():
     parser = argparse.ArgumentParser(description='模态贡献度分析')
-    parser.add_argument('--project_dir', default='/root/autodl-fs/CCN_Competition',
+    parser.add_argument('--project_dir', default=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                         help='项目根目录')
     parser.add_argument('--subjects', default='1,2,3,5', help='被试列表')
     parser.add_argument('--input_dir', default=None, help='单模态模型输入目录')

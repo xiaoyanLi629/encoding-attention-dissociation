@@ -50,11 +50,8 @@ project/
 │   ├── cogsci_bibliography_template.bib
 │   └── ...
 │
-├── results/example_run/                    # Pre-computed example outputs
-│
 └── runs/
-    ├── run_20251210_142057/                # Original analysis run
-    └── run_revised/                        # Revised analysis (NEW)
+    └── run_revised/                        # Analysis results
         ├── unimodal_models/                # 12 Ridge models (4 subjects × 3 modalities)
         ├── trained_models/                 # 4 multimodal .pth models
         ├── multi_model/                    # CLIP/Wav2Vec2/GPT-2 encoding comparison

@@ -13,8 +13,8 @@ from matplotlib.colors import LinearSegmentedColormap
 import json
 
 # Set up paths
-PROJECT_DIR = '/root/autodl-fs/CCN_Competition/project_1'
-RUN_DIR = os.path.join(PROJECT_DIR, 'runs', 'run_20251210_142057')
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+RUN_DIR = os.path.join(PROJECT_DIR, 'runs', 'run_revised')
 OUTPUT_DIR = os.path.join(RUN_DIR, 'figures')
 
 # Load data

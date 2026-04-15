@@ -488,7 +488,7 @@ class AdditionalFeatureExtractor:
 def main():
     parser = argparse.ArgumentParser(
         description='Extract additional model features for multi-model robustness')
-    parser.add_argument('--project_dir', default='/root/autodl-fs/CCN_Competition',
+    parser.add_argument('--project_dir', default=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                         help='Project root directory')
     parser.add_argument('--output_dir', default=None, help='Output directory')
     parser.add_argument('--modalities', default='visual,audio,language',

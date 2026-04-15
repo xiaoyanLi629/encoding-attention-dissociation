@@ -54,8 +54,7 @@ env/
 *.run.xml
 
 # Data files (too large for GitHub)
-# Uncomment if you don't want to include results
-# runs/
+results/
 
 # API keys and secrets (IMPORTANT: never commit these!)
 api_keys.txt
@@ -71,6 +70,18 @@ api_keys.txt
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Claude Code
+.claude/
+
+# Experiment runs (reproducible, large)
+runs/
+
+# Manuscript files
+cog_sci_latex2026/
+IEEE_manuscript/
+*.zip
+Reviews of *.pdf
 
 # Large media files
 media/dalle3/
