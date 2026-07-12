@@ -1,5 +1,5 @@
 """
-Step 3: 跨模态注意力分析
+Step 5: 跨模态注意力分析
 Cross-Modal Attention Analysis
 
 分析PersonalizedMultiModalNetwork模型中的跨模态注意力机制：
@@ -40,7 +40,7 @@ FIGURE_NAMES = {
 class CrossModalAttentionAnalyzer:
     """跨模态注意力分析器"""
     
-    def __init__(self, project_dir, subjects=[1, 2, 3, 5], output_dir=None):
+    def __init__(self, project_dir, subjects=[1, 2, 3, 5], output_dir=None, input_dir=None):
         self.project_dir = project_dir
         self.subjects = subjects
         self.modalities = ['visual', 'audio', 'language']
@@ -560,7 +560,7 @@ def main():
     args = parser.parse_args()
     subjects = [int(s.strip()) for s in args.subjects.split(',')]
     
-    analyzer = CrossModalAttentionAnalyzer(args.project_dir, subjects, args.output_dir)
+    analyzer = CrossModalAttentionAnalyzer(args.project_dir, subjects, args.output_dir, args.input_dir)
     analyzer.run_full_analysis()
 
 

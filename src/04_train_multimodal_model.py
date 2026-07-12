@@ -1,5 +1,5 @@
 """
-Step 6: 训练个性化多模态神经网络
+Step 4: 训练个性化多模态神经网络
 Train Personalized Multimodal Neural Network
 
 训练包含显式可学习模态权重的多模态网络，用于分析跨模态注意力分配策略。
@@ -9,7 +9,7 @@ Train Personalized Multimodal Neural Network
 - 显式可学习模态权重（softmax归一化）
 - 被试特异性适配器
 
-训练完成后保存 .pth 文件，供 03_crossmodal_attention_analysis.py 加载分析。
+训练完成后保存 .pth 文件，供 05_crossmodal_attention_analysis.py 加载分析。
 """
 
 import os

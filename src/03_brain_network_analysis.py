@@ -1,5 +1,5 @@
 """
-Step 4: 功能网络分析
+Step 3: 功能网络分析
 Brain Network Analysis for Cross-Modal Integration Study
 
 基于Schaefer 1000分区的7个功能网络进行分析：

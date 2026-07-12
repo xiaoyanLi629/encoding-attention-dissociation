@@ -96,3 +96,6 @@ media/gemini/
 # *.pth
 # *.pt
 # *.npy
+
+# Data (13 GB: HCP-style fMRI, features, transcripts; movies is a symlink)
+data/

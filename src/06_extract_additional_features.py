@@ -1,5 +1,5 @@
 """
-Step 5: 多模型特征提取
+Step 6: 多模型特征提取
 Extract Additional Model Features for Multi-Model Robustness Analysis
 
 为每个模态提取额外的特征表示，以回应审稿人R2的核心意见：

@@ -21,12 +21,12 @@ project/
 │
 ├── src/                                    # Analysis scripts
 │   ├── 01_train_unimodal_models.py         # Step 1: Train unimodal Ridge encoding models
-│   ├── 02_modality_contribution_analysis.py # Step 2: Modality contribution analysis
-│   ├── 03_crossmodal_attention_analysis.py  # Step 3: Cross-modal attention analysis
-│   ├── 04_brain_network_analysis.py         # Step 4: Brain network analysis
-│   ├── 05_extract_additional_features.py    # Step 5: Multi-model feature extraction (NEW)
-│   ├── 06_train_multimodal_model.py         # Step 6: Train multimodal attention network (NEW)
-│   ├── 07_control_analyses.py              # Step 7: Control analyses (NEW)
+│   ├── 02_modality_contribution_analysis.py # Step 2: Modality contribution analysis (MSI)
+│   ├── 03_brain_network_analysis.py         # Step 3: Brain network analysis (MII, DMN hub)
+│   ├── 04_train_multimodal_model.py         # Step 4: Train multimodal attention network
+│   ├── 05_crossmodal_attention_analysis.py  # Step 5: Extract attention weights from trained models
+│   ├── 06_extract_additional_features.py    # Step 6: Multi-model feature extraction (CLIP/Wav2Vec2/GPT-2)
+│   ├── 07_control_analyses.py              # Step 7: Control analyses (subset, end-to-end, multi-model)
 │   ├── generate_all_figures.py             # Publication figure generator
 │   ├── generate_encoding_attention_dissociation_figure.py
 │   └── brain_region_mapping.py             # Schaefer 1000 parcellation utilities
@@ -75,22 +75,17 @@ pip install transformers opencv-python-headless soundfile
 
 ## Analysis Pipeline
 
-### Core Analysis (Steps 1–4)
+Script numbering follows the paper's Results section order (III.A → III.D); each step depends only on earlier ones.
 
-| Step | Script | Description | GPU? |
-|------|--------|-------------|------|
-| 1 | `01_train_unimodal_models.py` | Ridge regression encoding models per modality | No |
-| 2 | `02_modality_contribution_analysis.py` | Modality specificity/dominance analysis | No |
-| 3 | `03_crossmodal_attention_analysis.py` | Extract attention weights from trained models | No |
-| 4 | `04_brain_network_analysis.py` | Network-level integration analysis | No |
-
-### New Analyses for Revision (Steps 5–7)
-
-| Step | Script | Description | GPU? |
-|------|--------|-------------|------|
-| 5 | `05_extract_additional_features.py` | Extract CLIP/Wav2Vec2/GPT-2 features from stimuli | **Yes** |
-| 6 | `06_train_multimodal_model.py` | Train PersonalizedMultiModalNetwork with learnable modality weights | **Yes** |
-| 7 | `07_control_analyses.py` | High-encoding subset, end-to-end, permutation controls | **Yes** |
+| Step | Script | Description | Paper section | GPU? |
+|------|--------|-------------|---------------|------|
+| 1 | `01_train_unimodal_models.py` | Ridge regression encoding models per modality | III.A | No |
+| 2 | `02_modality_contribution_analysis.py` | Modality specificity/dominance analysis (MSI) | III.A | No |
+| 3 | `03_brain_network_analysis.py` | Network-level integration analysis (MII, DMN hub) | III.B | No |
+| 4 | `04_train_multimodal_model.py` | Train PersonalizedMultiModalNetwork with learnable modality weights | III.C | **Yes** |
+| 5 | `05_crossmodal_attention_analysis.py` | Extract attention weights from trained models | III.C | No |
+| 6 | `06_extract_additional_features.py` | Extract CLIP/Wav2Vec2/GPT-2 features from stimuli | III.D | **Yes** |
+| 7 | `07_control_analyses.py` | High-encoding subset, end-to-end, multi-model controls | III.D | **Yes** |
 
 ### Quick Start
 
@@ -101,12 +96,12 @@ python src/01_train_unimodal_models.py \
     --output_dir runs/run_revised/unimodal_models
 
 # Train multimodal attention model (GPU recommended, ~1 hr)
-python src/06_train_multimodal_model.py \
+python src/04_train_multimodal_model.py \
     --project_dir /path/to/data \
     --output_dir runs/run_revised/trained_models
 
 # Extract additional model features (GPU required, ~2 hrs)
-python src/05_extract_additional_features.py \
+python src/06_extract_additional_features.py \
     --project_dir /path/to/data \
     --output_dir /path/to/data/data/features/additional_features
 

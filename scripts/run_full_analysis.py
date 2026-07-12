@@ -6,8 +6,9 @@ Run Full Analysis Pipeline for Cross-Modal Integration Study
 runs/run_YYYYMMDD_HHMMSS/
 ├── unimodal_models/
 ├── modality_contribution/
-├── crossmodal_attention/
 ├── brain_networks/
+├── trained_models/
+├── crossmodal_attention/
 └── figures/
 """
 
@@ -33,8 +34,9 @@ def create_run_directory(base_dir):
     subdirs = [
         'unimodal_models',
         'modality_contribution',
-        'crossmodal_attention',
         'brain_networks',
+        'trained_models',
+        'crossmodal_attention',
         'figures'
     ]
     
@@ -75,7 +77,7 @@ def main():
     parser.add_argument('--skip_training', action='store_true', 
                         help='跳过模型训练步骤')
     parser.add_argument('--only', type=str, default=None,
-                        choices=['train', 'contribution', 'attention', 'network', 'figures', 'dissociation_figure'],
+                        choices=['train', 'contribution', 'network', 'multimodal', 'attention', 'extract_features', 'control', 'figures', 'dissociation_figure'],
                         help='只运行特定步骤')
     parser.add_argument('--output_dir', type=str, default=None,
                         help='指定输出目录（默认创建带时间戳的新目录）')
@@ -89,7 +91,7 @@ def main():
     if args.output_dir:
         run_dir = args.output_dir
         os.makedirs(run_dir, exist_ok=True)
-        for subdir in ['unimodal_models', 'modality_contribution', 'crossmodal_attention', 'brain_networks', 'figures']:
+        for subdir in ['unimodal_models', 'modality_contribution', 'brain_networks', 'trained_models', 'crossmodal_attention', 'figures']:
             os.makedirs(os.path.join(run_dir, subdir), exist_ok=True)
         timestamp = "custom"
     else:
@@ -136,24 +138,49 @@ def main():
                     '--output_dir', os.path.join(run_dir, 'modality_contribution')]
         },
         {
-            'name': 'attention',
-            'script': os.path.join(src_dir, '03_crossmodal_attention_analysis.py'),
-            'description': 'Step 3: 跨模态注意力分析',
-            'args': ['--project_dir', args.project_dir, '--subjects', args.subjects,
-                    '--output_dir', os.path.join(run_dir, 'crossmodal_attention')]
-        },
-        {
             'name': 'network',
-            'script': os.path.join(src_dir, '04_brain_network_analysis.py'),
-            'description': 'Step 4: 功能网络分析',
+            'script': os.path.join(src_dir, '03_brain_network_analysis.py'),
+            'description': 'Step 3: 功能网络分析',
             'args': ['--project_dir', args.project_dir, '--subjects', args.subjects,
                     '--input_dir', os.path.join(run_dir, 'unimodal_models'),
                     '--output_dir', os.path.join(run_dir, 'brain_networks')]
         },
         {
+            'name': 'multimodal',
+            'script': os.path.join(src_dir, '04_train_multimodal_model.py'),
+            'description': 'Step 4: 训练多模态神经网络',
+            'skip': args.skip_training,
+            'args': ['--project_dir', args.project_dir, '--subjects', args.subjects,
+                    '--output_dir', os.path.join(run_dir, 'trained_models')]
+        },
+        {
+            'name': 'attention',
+            'script': os.path.join(src_dir, '05_crossmodal_attention_analysis.py'),
+            'description': 'Step 5: 跨模态注意力分析',
+            'args': ['--project_dir', args.project_dir, '--subjects', args.subjects,
+                    '--input_dir', os.path.join(run_dir, 'trained_models'),
+                    '--output_dir', os.path.join(run_dir, 'crossmodal_attention')]
+        },
+        {
+            'name': 'extract_features',
+            'script': os.path.join(src_dir, '06_extract_additional_features.py'),
+            'description': 'Step 6: 多模型特征提取 CLIP/wav2vec2/GPT-2',
+            'args': ['--project_dir', args.project_dir,
+                    '--output_dir', os.path.join(args.project_dir, 'data', 'features',
+                                                 'additional_features')]
+        },
+        {
+            'name': 'control',
+            'script': os.path.join(src_dir, '07_control_analyses.py'),
+            'description': 'Step 7: 控制分析 permutation/subset/e2e',
+            'args': ['--project_dir', args.project_dir, '--subjects', args.subjects,
+                    '--unimodal_results_dir', os.path.join(run_dir, 'unimodal_models'),
+                    '--output_dir', os.path.join(run_dir, 'control_analyses')]
+        },
+        {
             'name': 'figures',
             'script': os.path.join(src_dir, 'generate_all_figures.py'),
-            'description': 'Step 5: 生成论文图表',
+            'description': 'Step 8: 生成论文图表',
             'args': ['--project_dir', args.project_dir,
                     '--input_dir', run_dir,
                     '--output_dir', os.path.join(run_dir, 'figures')]
@@ -161,8 +188,9 @@ def main():
         {
             'name': 'dissociation_figure',
             'script': os.path.join(src_dir, 'generate_encoding_attention_dissociation_figure.py'),
-            'description': 'Step 6: 生成编码-注意力分离图',
-            'args': []  # Script uses hardcoded paths
+            'description': 'Step 9: 生成编码-注意力分离图',
+            'args': ['--input_dir', run_dir,
+                    '--output_dir', os.path.join(run_dir, 'figures')]
         }
     ]
     

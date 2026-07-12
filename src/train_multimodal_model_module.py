@@ -9,7 +9,7 @@ Train Personalized Multimodal Neural Network
 - 显式可学习模态权重（softmax归一化）
 - 被试特异性适配器
 
-训练完成后保存 .pth 文件，供 03_crossmodal_attention_analysis.py 加载分析。
+训练完成后保存 .pth 文件，供 05_crossmodal_attention_analysis.py 加载分析。
 """
 
 import os
