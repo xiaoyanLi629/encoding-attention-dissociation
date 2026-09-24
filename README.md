@@ -66,7 +66,7 @@ flowchart LR
     C --> E
     D --> F["Encoding strength r<br/>MSI · MII"]
     E --> G["Learned modality weights α"]
-    F --> H{"Efficiency Gap<br/>α_eff − α_obs"}
+    F --> H(["Efficiency Gap<br/>efficient α − learned α"])
     G --> H
 ```
 
