@@ -48,13 +48,12 @@ rumeiyang@njmu.edu.cn}
 Baltimore, MD, USA \\
 jchen@ubalt.edu}
 \and
-\IEEEauthorblockN{Xiaoyan Li\textsuperscript{*}}
+\IEEEauthorblockN{Xiaoyan Li\textsuperscript{*}\thanks{\textsuperscript{*}Corresponding author: Xiaoyan Li (lixiaoy5@msu.edu).}}
 \IEEEauthorblockA{\textit{Dept. of Computational Mathematics,} \\
 \textit{Science and Engineering} \\
 \textit{Michigan State University}\\
 East Lansing, MI, USA \\
-lixiaoy5@msu.edu \\
-\textsuperscript{*}\textit{Corresponding author}}
+lixiaoy5@msu.edu}
 \and
 \IEEEauthorblockN{Yujia Du}
 \IEEEauthorblockA{\textit{Suzhou MetaCortex Intelligence} \\
@@ -66,7 +65,7 @@ saroyi@163.com}
 \maketitle
 
 \begin{abstract}
-How does the brain allocate attention across sensory modalities during multimodal integration? Classical Bayesian frameworks predict that efficient systems weight each modality in proportion to its encoding strength. We tested this prediction using fMRI data from four participants watching naturalistic movies (~65 hours). Through unimodal encoding models and a personalized multimodal neural network with learnable modality weights, we found a striking dissociation: visual features dominated encoding (mean $r = 0.204$, 91\% of brain regions), yet the learned attention weights remained balanced ($\sim$33\% per modality). We term this the Encoding-Attention Dissociation. The finding persisted when restricting analysis to high-encoding regions ($r > 0.2$, 407 regions), under end-to-end retraining, and with alternative feature extractors (CLIP, Wav2Vec2, GPT-2). The Default Mode Network emerged as the primary integration hub (Multimodal Integration Index = 0.744), with integration following a gradient from sensory to transmodal cortex. These results are consistent with the possibility that multimodal integration in the brain favors robustness over narrow efficiency, maintaining balanced attention regardless of encoding strength.
+How does the brain allocate attention across sensory modalities during multimodal integration? Classical Bayesian frameworks predict that efficient systems weight each modality in proportion to its encoding strength. We tested this prediction using fMRI data from four participants watching naturalistic movies ($\sim$65 hours). Through unimodal encoding models and a personalized multimodal neural network with learnable modality weights, we found a striking dissociation: visual features dominated encoding (mean $r = 0.204$, 91\% of brain regions), yet the learned attention weights remained balanced ($\sim$33\% per modality). We term this the Encoding-Attention Dissociation. The finding persisted when restricting analysis to high-encoding regions ($r > 0.2$, 407 regions), under end-to-end retraining, and with alternative feature extractors (CLIP, Wav2Vec2, GPT-2). The Default Mode Network emerged as the primary integration hub (Multimodal Integration Index = 0.744), with integration following a gradient from sensory to transmodal cortex. These results are consistent with the possibility that multimodal integration in the brain favors robustness over narrow efficiency, maintaining balanced attention regardless of encoding strength.
 \end{abstract}
 
 \begin{IEEEkeywords}
