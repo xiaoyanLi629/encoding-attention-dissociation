@@ -79,7 +79,10 @@ runs/
 
 # Manuscript files
 cog_sci_latex2026/
-IEEE_manuscript/
+# IEEE_manuscript/ holds the BIBM 2026 camera-ready source; only LaTeX build artifacts are ignored
+IEEE_manuscript/*.aux
+IEEE_manuscript/*.log
+IEEE_manuscript/*.out
 *.zip
 Reviews of *.pdf
 
@@ -99,3 +102,6 @@ media/gemini/
 
 # Data (13 GB: HCP-style fMRI, features, transcripts; movies is a symlink)
 data/
+
+# Local camera-ready bundle (talk video etc.); the paper source lives in IEEE_manuscript/
+B321_camera_ready/
